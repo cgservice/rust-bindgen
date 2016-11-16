@@ -110,7 +110,7 @@ fn main(){
     let mut file = File::create("my_lib.rs").expect("Failed to open file");
     // Wrap the bindings in a `pub mod` before writing bindgen's output
     file.write(format!("pub mod {} {{\n", "my_lib").as_bytes()).unwrap();
-    file.write(generated_bindings.as_bytes()).unwrap();
+    file.write(generated_bindings.to_string().as_bytes()).unwrap();
     file.write(b"}").unwrap();
 }
 ```
