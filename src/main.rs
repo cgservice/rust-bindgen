@@ -16,20 +16,19 @@ Generate C bindings for Rust.
 
 Usage:
   bindgen [options] <file> [-- <clang-args>...]
-  bindgen [options] (--match=<name> ...) <file> [-- <clang-args>...]
   bindgen (-h | --help)
 
 Options:
   <clang-args>                 Options passed directly to clang.
   -h, --help                   Display this help message.
-  --link=<library>             Link to a dynamic library, can be provided multiple times.
+  --link=<library> ...         Link to a dynamic library, can be provided multiple times.
                                <library> is in the format `[kind=]lib`, where `kind` is
                                one of `static`, `dynamic` or `framework`.
   --output=<output>            Write bindings to <output> (- is stdout).
                                [default: -]
-  --match=<name>               Only output bindings for definitions from files
+  --match=<name> ...           Only output bindings for definitions from files
                                whose name contains <name>
-                               If multiple -match options are provided, files
+                               If multiple --match options are provided, files
                                matching any rule are bound to.
   --builtins                   Output bindings for builtin definitions
                                (for example __builtin_va_list)
@@ -67,7 +66,7 @@ Options:
 struct Args {
     arg_file: String,
     arg_clang_args: Vec<String>,
-    flag_link: Option<String>,
+    flag_link: Vec<String>,
     flag_output: String,
     flag_match: Vec<String>,
     flag_builtins: bool,
@@ -114,7 +113,7 @@ fn args_to_opts(args: Args) -> Builder<'static> {
     if args.flag_dont_convert_floats {
         builder.dont_convert_floats();
     }
-    if let Some(link) = args.flag_link {
+    for link in args.flag_link {
         let mut parts = link.split('=');
         let (lib, kind) = match (parts.next(), parts.next()) {
             (Some(lib), None) => (lib, LinkType::Dynamic),
