@@ -238,6 +238,11 @@ impl Type {
     pub fn call_conv(&self) -> CXCallingConv {
         unsafe { clang_getFunctionTypeCallingConv(self.x) }
     }
+
+    #[cfg(feature = "clang_3_9")]
+    pub fn get_named_type(&self) -> Type {
+        unsafe { Type { x: clang_Type_getNamedType(self.x) } }
+    }
 }
 
 // SourceLocation

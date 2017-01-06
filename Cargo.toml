@@ -37,6 +37,7 @@ lazy_static = "0.2"
 
 [features]
 static = ["clang-sys/static"]
+clang_3_9 = ["clang-sys/clang_3_9"]
 
 [[test]]
 name = "tests"
